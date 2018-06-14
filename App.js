@@ -1,11 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Navigator from './js/Navigator';
 
 export default class App extends React.Component {
+  componentDidMount() {
+   // setNotification();
+  }
+
   render() {
     return (
-      <Navigator />
+      <View style={{ flex: 1 }}>
+        <Navigator />
+      </View>
     );
   }
 }

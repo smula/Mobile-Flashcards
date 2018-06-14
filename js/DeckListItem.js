@@ -9,7 +9,7 @@ const DeckListItem = ({ item, navigation }) => (
             justifyContent: 'center',
             alignItems: 'center',
         }}
-        onPress={() => navigation.push('Deck')}
+        onPress={() => navigation.push('Deck', { deck: item })}
     >
         <Text>
             { item.title }

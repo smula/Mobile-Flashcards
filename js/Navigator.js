@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import DeckListView from './DeckListView';
 import DeckView from './DeckView';
+import CardView from './CardView';
 
 const Stack = createStackNavigator({
     DeckList: {
@@ -15,7 +16,13 @@ const Stack = createStackNavigator({
         navigationOptions: {
             title: 'Deck View'
         }
-    }
+    },
+    Card: {
+        screen: CardView,
+        navigationOptions: {
+            title: 'Card View'
+        }
+    },
 });
 
 export default Stack;
