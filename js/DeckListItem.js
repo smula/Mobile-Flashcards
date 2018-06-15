@@ -1,8 +1,7 @@
 import React from 'react';
 import { TouchableHighlight, View, Text } from 'react-native';
 
-const DeckListItem = ({ item, navigation }) => {
-    console.log(item);
+const DeckListItem = ({ item, navigation, updateDecks }) => {
     return (
     <TouchableHighlight
         style={{
@@ -12,7 +11,10 @@ const DeckListItem = ({ item, navigation }) => {
             alignItems: 'center',
             backgroundColor: 'white',
         }}
-        onPress={() => navigation.push('Deck', { deck: item })}
+        onPress={() => navigation.push('Deck', {
+            deck: item,
+            updateDecks, 
+        })}
     >
         <View
             style={{

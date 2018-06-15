@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { addDeck, fetchDecks } from './utils/api';
 
 class AddDeckForm extends Component {
     state = {
@@ -12,6 +13,11 @@ class AddDeckForm extends Component {
         let error = false;
         title = title.trim();
         if (title) {
+            addDeck({ title })
+                .then(() => {
+                    this.props.navigation.state.params.updateDecks();
+                    this.props.navigation.goBack();
+                });
             // this should hadnle the submit of crating a deck 
         } else {
             error = true;

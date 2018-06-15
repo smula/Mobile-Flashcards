@@ -2,8 +2,25 @@ import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
 
 class DeckView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            deck: this.props.navigation.state.params.deck,
+        }
+
+        this.updateDeck = this.updateDeck.bind(this);
+    }
+
+
+    updateDeck(updatedDeck) {
+        this.setState({
+            deck: updatedDeck,
+        });
+    }
+
     render() {
-        const { deck } = this.props.navigation.state.params;
+        const { deck } = this.state;
+        const { updateDecks } = this.props.navigation.state.params;
         return (
             <View
                 style={{
@@ -18,7 +35,9 @@ class DeckView extends Component {
                 </View>
                 <TouchableHighlight
                     style={{ borderWidth: 2, height: 50, width: 300, justifyContent: 'center', alignItems: 'center' }}
-                    onPress={() => this.props.navigation.navigate('Card', deck)}
+                    onPress={() => {
+                        deck.cards.length > 0 ? this.props.navigation.navigate('Card', deck) : null;
+                    }}
                 >
                     <Text>
                         Start Quiz
@@ -26,7 +45,7 @@ class DeckView extends Component {
                 </TouchableHighlight>
                 <TouchableHighlight
                     onPress={() => {
-                        this.props.navigation.navigate('AddCard', deck);
+                        this.props.navigation.navigate('AddCard', { deck, updateDecks, updateDeck: this.updateDeck });
                     }}
                 >
                     <Text>

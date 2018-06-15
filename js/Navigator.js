@@ -4,6 +4,7 @@ import DeckListView from './DeckListView';
 import DeckView from './DeckView';
 import CardView from './CardView';
 import AddCardForm from './AddCardForm';
+import AddDeckForm from './AddDeckForm';
 
 const Stack = createStackNavigator({
     DeckList: {
@@ -28,6 +29,12 @@ const Stack = createStackNavigator({
         screen: AddCardForm,
         navigationOptions: {
             title: 'Add Card'
+        }
+    },
+    AddDeck: {
+        screen: AddDeckForm,
+        navigationOptions: {
+            title: 'Add Deck'
         }
     },
 

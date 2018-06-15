@@ -23,7 +23,6 @@ class CardView extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.navigation.state.params.cards.length);
         this.setState({
             cards: this.props.navigation.state.params.cards,
             amount: this.props.navigation.state.params.cards.length,
@@ -69,9 +68,13 @@ class CardView extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <View style={{ flex: 1, justifyContent: 'space-between'}}>
+                <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                    <Text>
+                        Card: { this.state.currentCard + 1 } / { this.state.amount }
+                    </Text>
+                </View>
                 <View style={{ borderWidth: 1, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     {!this.state.showPercentage
                     ? (
@@ -104,16 +107,29 @@ class CardView extends Component {
                             Wrong
                         </Text>
                     </TouchableHighlight>
-                    <TouchableHighlight
-                        style={{ padding: 30, borderWidth: 2 }}
-                        onPress={() => this.showAnswer()}
-                    >
-                        <Text>
-                            {
-                                !this.state.flipped ? 'Show Answer' : 'Hide Answer'
-                            }
-                        </Text>
-                    </TouchableHighlight>
+                    {
+                        this.state.showReplay
+                            ? <TouchableHighlight
+                                style={{ padding: 30, borderWidth: 2 }}
+                                onPress={() => this.props.navigation.goBack()}
+                            >
+                                <Text>
+                                    Go back to the deck view
+                                </Text>
+                            </TouchableHighlight>
+                            : <TouchableHighlight
+                                style={{ padding: 30, borderWidth: 2 }}
+                                onPress={() => this.showAnswer()}
+                            >
+                                <Text>
+                                    {
+                                        !this.state.flipped ? 'Show Answer' : 'Hide Answer'
+                                    }
+                                </Text>
+                            </TouchableHighlight>
+                    }
+                    
+
                     <TouchableHighlight
                         style={{ padding: 30, borderWidth: 2 }}
                         onPress={() => this.nextQuestion('correct')}
@@ -124,6 +140,7 @@ class CardView extends Component {
                             }
                         </Text>
                     </TouchableHighlight>
+
                 </View>
             </View>
         );

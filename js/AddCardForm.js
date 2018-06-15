@@ -10,7 +10,8 @@ class AddCardForm extends Component {
     }
 
     handleSubmit() {
-        const { id } = this.props.navigation.state.params;
+        const { id } = this.props.navigation.state.params.deck;
+        const { updateDecks, updateDeck } = this.props.navigation.state.params;
         let { question, answer } = this.state;
         let error = false;
         question = question.trim();
@@ -20,7 +21,12 @@ class AddCardForm extends Component {
                 question,
                 answer,
             };
-            addCard({ deckId: id, newCard });
+            addCard({ deckId: id, newCard })
+                .then((res) => {
+                    updateDeck(res);
+                    updateDecks();
+                    this.props.navigation.goBack();
+                });
         } else {
             error = true;
         }
