@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, FlatList } from 'react-native';
 import { fetchDecks, initData } from './utils/api';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import DeckListItem from './DeckListItem';
 
 
@@ -21,7 +21,9 @@ class DeckListView extends Component {
     render() {
         const { data } = this.state;
         return (
-            <View>
+            <View
+                style={{ flex: 1, backgroundColor: 'white'}}
+            >
                 <View style={{ width: '100%', alignItems: 'center' }}>
                     <Text
                         style={{

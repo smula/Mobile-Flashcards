@@ -11,8 +11,11 @@ class DeckView extends Component {
                     alignItems: 'center',
                     flex: 1,
                 }}
-            >
-                <Text>{ deck.title }</Text>
+            >   
+                <View>
+                    <Text>{ deck.title }</Text>
+                    <Text>Amount of cards in this deck: { deck.cards.length }</Text>
+                </View>
                 <TouchableHighlight
                     style={{ borderWidth: 2, height: 50, width: 300, justifyContent: 'center', alignItems: 'center' }}
                     onPress={() => this.props.navigation.navigate('Card', deck)}
@@ -21,7 +24,11 @@ class DeckView extends Component {
                         Start Quiz
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight>
+                <TouchableHighlight
+                    onPress={() => {
+                        this.props.navigation.navigate('AddCard', deck);
+                    }}
+                >
                     <Text>
                         Add Card
                     </Text>

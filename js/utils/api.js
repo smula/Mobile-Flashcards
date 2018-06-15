@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
+const INIT_KEY = "flashcards:init";
 const DECKS_STORAGE_KEY = "flashcards:decks";
 
 const dummyData = [
@@ -82,21 +83,47 @@ const dummyData = [
         ]
     }
 ];
+export const clearAllData = () => {
+    AsyncStorage.clear();
+}
 
 export const setDummyDecks = () => {
     AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(dummyData));
+    AsyncStorage.setItem(INIT_KEY, JSON.stringify({ initSet: true }));
 }
 
 
 export const fetchDecks = () => {
-    console.log('fetching')
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then((res) => JSON.parse(res));
 }
 
 export const initData = () => {
-    console.log('init');
-    setDummyDecks();
+    AsyncStorage.getItem(INIT_KEY)
+        .then((res) => {
+            const result = JSON.parse(res);
+            if (result.initSet !== true) {
+                setDummyDecks();
+            }
+        })
     return fetchDecks();
-            //.then(() => fetchDecks())
+}
+
+export const addCard = ({ deckId, newCard }) => {
+    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+        .then((res) => {
+            const result = JSON.parse(res);
+            const deck = result.find((item) => {
+                return item.id === deckId;
+            });
+            deck.cards.push(newCard);
+            const removedData = result.filter((item) => item.id !== deckId);
+
+            const returnData = [
+                {...deck},
+                ...removedData
+            ];
+            AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(returnData))
+                .then(() => 'done');
+        });
 }

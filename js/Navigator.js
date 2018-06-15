@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 import DeckListView from './DeckListView';
 import DeckView from './DeckView';
 import CardView from './CardView';
+import AddCardForm from './AddCardForm';
 
 const Stack = createStackNavigator({
     DeckList: {
@@ -23,6 +24,13 @@ const Stack = createStackNavigator({
             title: 'Card View'
         }
     },
+    AddCard: {
+        screen: AddCardForm,
+        navigationOptions: {
+            title: 'Add Card'
+        }
+    },
+
 });
 
 export default Stack;
