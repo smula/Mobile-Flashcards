@@ -16,9 +16,13 @@ class AddDeckForm extends Component {
         title = title.trim();
         if (title) {
             addDeck({ title })
-                .then(() => {
+                .then((res) => {
                     this.props.navigation.state.params.updateDecks();
                     this.props.navigation.goBack();
+                    this.props.navigation.navigate('Deck', {
+                        deck: res,
+                        updateDecks: this.props.navigation.state.params.updateDecks,
+                    })
                 });
         } else {
             error = true;

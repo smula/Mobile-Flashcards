@@ -31,6 +31,20 @@ const dummyData = [
             },
         ],
     },
+    {
+        id: 2,
+        title: 'Getting Started',
+        cards: [
+            {
+                question: 'How to create do you create a deck?',
+                answer: 'Press the "+" button in the deck list view'
+            },
+            {
+                question: 'How to create do you create a card?',
+                answer: 'Press the "Add Card" button in the individual deck view'
+            },
+        ],
+    },
 ];
 
 export const clearAllData = () => {
@@ -52,7 +66,7 @@ export const initData = () => {
     AsyncStorage.getItem(INIT_KEY)
         .then((res) => {
             const result = JSON.parse(res);
-            if (result && result.initSet !== true) {
+            if (result == null) {
                 setDummyDecks();
             }
         })
@@ -82,14 +96,15 @@ export const addDeck = ({ title }) => {
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then((res) => {
             const result = JSON.parse(res) ? JSON.parse(res) : [];
+            const id = uuidv1(); 
             result.push({
-                id: uuidv1(),
+                id,
                 title,
                 cards: [],
             });
             return AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(result))
                 .then(() => ({
-                        id: uuidv1(),
+                        id,
                         title,
                         cards: [],
                     }));
