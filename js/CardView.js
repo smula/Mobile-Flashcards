@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
+import { clearLocalNotification, setLocalNotification } from './utils/api';
 
 const defaultState = {
     showPercentage: false,
@@ -40,7 +41,10 @@ class CardView extends Component {
                 flipped: false,
                 correct,
                 showReplay: true,
-            })
+            });
+
+            clearLocalNotification()
+                .then(setLocalNotification);
         } else if (this.state.showReplay) {
             this.setState({
                 ...defaultState,
@@ -96,8 +100,6 @@ class CardView extends Component {
                     : this.renderPercentage()
                     }
                 </View>
-
-
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableHighlight
                         style={{ padding: 30, borderWidth: 2 }}
@@ -128,8 +130,6 @@ class CardView extends Component {
                                 </Text>
                             </TouchableHighlight>
                     }
-                    
-
                     <TouchableHighlight
                         style={{ padding: 30, borderWidth: 2 }}
                         onPress={() => this.nextQuestion('correct')}

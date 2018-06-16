@@ -1,6 +1,8 @@
 import { AsyncStorage } from 'react-native';
+import { Notifications, Permissions } from 'expo';
 import uuidv1 from 'uuid/v1';
 
+const NOTIFICATION_KEY = 'flashcards:notifications'
 const INIT_KEY = "flashcards:init";
 const DECKS_STORAGE_KEY = "flashcards:decks";
 
@@ -88,4 +90,55 @@ export const addDeck = ({ title }) => {
             return AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(result))
                 .then(() => result);
         });
+}
+const createNotification = () => ({
+    title: 'Forgotten anything?',
+    body: `Dont't forget to quiz today!`,
+    ios: {
+        sound: true,
+    },
+    android: {
+        priority: 'high',
+        sound: true,
+        vibrate: true,
+        sticky: false,
+    },
+});
+
+export const setLocalNotification = () => {
+    AsyncStorage.getItem(NOTIFICATION_KEY)
+        .then(JSON.parse)
+        .then((data) => {
+            clearLocalNotification().then(() => {
+                if (data === null) {
+                    Permissions.askAsync(Permissions.NOTIFICATIONS)
+                        .then(({ status }) => {
+                            console.log('status');
+                            if (status === 'granted') {
+                                Notifications.cancelAllScheduledNotificationsAsync();
+
+                                let tomorrow = new Date();
+                                tomorrow.setDate(tomorrow.getDate());
+                                tomorrow.setHours(4);
+                                tomorrow.setMinutes(tomorrow.getMinutes() + 1);
+                                console.log({ tomorrow: tomorrow });
+                                Notifications.scheduleLocalNotificationAsync(
+                                    createNotification(),
+                                    {
+                                        time: tomorrow,
+                                        repeat: 'day',
+                                    }
+                                );
+
+                                AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
+                            }
+                        });
+                }
+            });
+        });
+}
+
+export const clearLocalNotification = () => {
+    return AsyncStorage.removeItem(NOTIFICATION_KEY)
+        .then(Notifications.cancelAllScheduledNotificationsAsync)
 }

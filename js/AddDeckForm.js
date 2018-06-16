@@ -18,7 +18,6 @@ class AddDeckForm extends Component {
                     this.props.navigation.state.params.updateDecks();
                     this.props.navigation.goBack();
                 });
-            // this should hadnle the submit of crating a deck 
         } else {
             error = true;
         }
