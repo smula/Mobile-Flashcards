@@ -88,7 +88,11 @@ export const addDeck = ({ title }) => {
                 cards: [],
             });
             return AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(result))
-                .then(() => result);
+                .then(() => ({
+                        id: uuidv1(),
+                        title,
+                        cards: [],
+                    }));
         });
 }
 
