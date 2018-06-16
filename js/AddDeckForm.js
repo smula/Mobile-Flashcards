@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, TouchableOpacity } from 'react-native';
-import { addDeck, fetchDecks } from './utils/api';
+import { View, TextInput, Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { addDeck } from './utils/api';
+import styles from './styles/formStyles';
+import Button from './Button';
 
 class AddDeckForm extends Component {
     state = {
@@ -27,37 +29,31 @@ class AddDeckForm extends Component {
     }
 
     render() {
+        const { error, title } = this.state;
         return (
-            <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', padding: 20 }}>
-                <Text>
+            <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+                {error 
+                    ? <Text style={{ color: 'red' }}>Something went wrong</Text>
+                    : null
+                }
+                <Text style={styles.title}>
                     Choose a title for the new deck
                 </Text>
                 <TextInput
-                    value={this.state.title}
-                    style={{ width: '100%' }}
-                    onChangeText={text => {
-                        this.setState
-                        ({
-                            title: text,
-                        })
-                    }}
+                    value={title}
+                    style={styles.textInput}
+                    underlineColorAndroid={'rgba(0,0,0,0)'}
+                    onChangeText={text => this.setState({ title: text })}
+                    placeholder="Enter title here"
                 />
-                <TouchableOpacity
+                <Button
                     onPress={() => {
                         this.handleSubmit();
                     }}
-                    style={{
-                        width: '100%',
-                        height: 40,
-                        borderWidth: 1,
-                    }}
-                >
-                    <Text>
-                        Submit
-                    </Text>
-                </TouchableOpacity>
+                    buttonText="Submit"
+                />
 
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }

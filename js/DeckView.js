@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
+import styles from './styles/deckViewStyles';
+import Button from './Button';
 
 class DeckView extends Component {
     constructor(props) {
@@ -18,40 +20,35 @@ class DeckView extends Component {
         });
     }
 
-    render() {
+    handleGoToQuiz() {
+        const { deck } = this.state;
+        deck.cards.length > 0 ? this.props.navigation.navigate('Card', deck) : null;
+    }
+
+    handleGoToAddCard() {
         const { deck } = this.state;
         const { updateDecks } = this.props.navigation.state.params;
+        this.props.navigation.navigate('AddCard', { deck, updateDecks, updateDeck: this.updateDeck });
+    }
+
+    render() {
+        const { deck } = this.state;
         return (
             <View
-                style={{
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    flex: 1,
-                }}
+                style={styles.container}
             >   
-                <View>
-                    <Text>{ deck.title }</Text>
-                    <Text>Amount of cards in this deck: { deck.cards.length }</Text>
+                <View style={styles.titleHolder}>
+                    <Text style={styles.deckTitle}>{ deck.title }</Text>
+                    <Text style={styles.deckAmount}>Amount of cards in this deck: { deck.cards.length }</Text>
                 </View>
-                <TouchableHighlight
-                    style={{ borderWidth: 2, height: 50, width: 300, justifyContent: 'center', alignItems: 'center' }}
-                    onPress={() => {
-                        deck.cards.length > 0 ? this.props.navigation.navigate('Card', deck) : null;
-                    }}
-                >
-                    <Text>
-                        Start Quiz
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={() => {
-                        this.props.navigation.navigate('AddCard', { deck, updateDecks, updateDeck: this.updateDeck });
-                    }}
-                >
-                    <Text>
-                        Add Card
-                    </Text>
-                </TouchableHighlight>
+                <Button
+                    buttonText="Start Quiz"
+                    onPress={() => this.handleGoToQuiz()}
+                />
+                <Button
+                    buttonText="Add Card"
+                    onPress={() => this.handleGoToAddCard()}
+                />
             </View>
         );
     }

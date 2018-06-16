@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { addCard } from './utils/api';
+import styles from './styles/formStyles';
+import Button from './Button';
 
 class AddCardForm extends Component {
     state = {
@@ -36,48 +38,48 @@ class AddCardForm extends Component {
     }
 
     render() {
+        const { error, question, answer } = this.state;
         return (
-            <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', padding: 20 }}>
-                <Text>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+                enabled
+            >
+                {error 
+                    ? <Text style={{ color: 'red' }}>Something went wrong</Text>
+                    : null
+                }
+                <Text style={styles.title}>
                     Question for the new card
                 </Text>
                 <TextInput
-                    value={this.state.question}
-                    style={{ width: '100%' }}
+                    value={question}
+                    style={styles.textInput}
                     onChangeText={text => {
                         this.setState({
                             question: text,
                         })
                     }}
                 />
-                <Text>
+                <Text style={styles.title}>
                     Answer for the new card
                 </Text>
                 <TextInput
-                    value={this.state.answer}
-                    style={{ width: '100%' }}
+                    value={answer}
+                    style={styles.textInput}
                     onChangeText={text => {
                         this.setState({
                             answer: text,
                         })
                     }}
                 />
-                <TouchableOpacity
+                <Button
                     onPress={() => {
                         this.handleSubmit();
                     }}
-                    style={{
-                        width: '100%',
-                        height: 40,
-                        borderWidth: 1,
-                    }}
-                >
-                    <Text>
-                        Submit
-                    </Text>
-                </TouchableOpacity>
-
-            </View>
+                    buttonText="Submit"
+                />
+            </KeyboardAvoidingView>
         );
     }
 }

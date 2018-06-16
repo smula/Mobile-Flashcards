@@ -3,6 +3,7 @@ import { View, FlatList } from 'react-native';
 import { fetchDecks, initData, clearAllData } from './utils/api';
 import DeckListItem from './DeckListItem';
 import AddDeckButton from './AddDeckButton';
+import styles from './styles/deckListStyles';
 
 class DeckListView extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -43,14 +44,13 @@ class DeckListView extends Component {
         const { data } = this.state;
         return (
             <View
-                style={{ flex: 1, backgroundColor: 'white'}}
+                style={styles.flatListContainer}
             >
-
                 <FlatList
                     keyExtractor={(data) => data.id.toString()}
                     data={data}
                     renderItem={({ item }) => <DeckListItem navigation={this.props.navigation} updateDecks={this.updateDecks} item={item} />}
-                    ItemSeparatorComponent={() => <View style={{ height: 2, backgroundColor: 'orange', width: '100%' }} />}
+                    ItemSeparatorComponent={() => <View style={styles.flatListSeparator} />}
                 />
             </View>
         )

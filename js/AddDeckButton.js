@@ -1,20 +1,14 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import styles from './styles/addDeckButtonStyles';
 
 const AddDeckButton = ({ navigation, updateDecks }) => (
     <TouchableOpacity
         onPress={() => navigation.navigate('AddDeck', { updateDecks })}
-        style={{
-            height: '100%',
-            width: 60,
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}
+        style={styles.button}
     >
         <Text
-            style={{
-                fontSize: 30,
-            }}
+            style={styles.buttonText}
         >
             +
         </Text>

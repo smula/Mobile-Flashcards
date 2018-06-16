@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { clearLocalNotification, setLocalNotification } from './utils/api';
+import styles from './styles/cardViewStyles';
+import QuizButton from './QuizButton';
 
 const defaultState = {
     showPercentage: false,
@@ -24,9 +26,11 @@ class CardView extends Component {
     }
 
     componentWillMount() {
+        const { cards } = this.props.navigation.state.params;
+
         this.setState({
-            cards: this.props.navigation.state.params.cards,
-            amount: this.props.navigation.state.params.cards.length,
+            cards: cards,
+            amount: cards.length,
         })
     }
 
@@ -68,31 +72,35 @@ class CardView extends Component {
 
     renderPercentage() {
         const score = Math.round((this.state.correct / this.state.amount) * 100);
-        return <Text>Your score is: { score }%</Text>;
+        return <Text style={styles.contentText}>Your score is: { score }%</Text>;
     }
 
     render() {
+        const {
+            currentCard,
+            amount,
+            showPercentage,
+            cards,
+            flipped,
+            showReplay,
+        } = this.state;
         return (
-            <View style={{ flex: 1, justifyContent: 'space-between'}}>
-                <View style={{ position: 'absolute', top: 10, right: 10 }}>
+            <View style={styles.container}>
+                <View style={styles.cardProgress}>
                     <Text>
-                        Card: { this.state.currentCard + 1 } / { this.state.amount }
+                        Card: { currentCard + 1 } / { amount }
                     </Text>
                 </View>
-                <View style={{ borderWidth: 1, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    {!this.state.showPercentage
+                <View style={styles.questionsContainer}>
+                    {!showPercentage
                     ? (
-                        <View>
-                            <Text>
-                                {
-                                    this.state.cards[this.state.currentCard].question
-                                }
+                        <View style={styles.contentContainer}>
+                            <Text style={styles.contentText}>
+                                {cards[currentCard].question}
                             </Text>
-                            {this.state.flipped
-                                && <Text>
-                                {
-                                    this.state.cards[this.state.currentCard].answer
-                                }
+                            {flipped
+                                && <Text style={styles.contentText}>
+                                answer: {cards[currentCard].answer}
                                 </Text>
                             }
                         </View>
@@ -100,47 +108,37 @@ class CardView extends Component {
                     : this.renderPercentage()
                     }
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <TouchableHighlight
-                        style={{ padding: 30, borderWidth: 2 }}
+                <View style={styles.buttonContainer}>
+                    <QuizButton
                         onPress={() => this.nextQuestion('inCorrect')}
-                    >
-                        <Text>
-                            Wrong
-                        </Text>
-                    </TouchableHighlight>
+                        type="wrong"
+                    />
                     {
-                        this.state.showReplay
-                            ? <TouchableHighlight
-                                style={{ padding: 30, borderWidth: 2 }}
+                        showReplay
+                            ? <TouchableOpacity
+                                style={styles.showAnswerButton}
                                 onPress={() => this.props.navigation.goBack()}
                             >
-                                <Text>
+                                <Text style={styles.showAnswerButtonText}>
                                     Go back to the deck view
                                 </Text>
-                            </TouchableHighlight>
-                            : <TouchableHighlight
-                                style={{ padding: 30, borderWidth: 2 }}
+                            </TouchableOpacity>
+                            : <TouchableOpacity
+                                style={styles.showAnswerButton}
                                 onPress={() => this.showAnswer()}
                             >
-                                <Text>
+                                <Text style={styles.showAnswerButtonText}>
                                     {
-                                        !this.state.flipped ? 'Show Answer' : 'Hide Answer'
+                                        !flipped ? 'Show Answer' : 'Hide Answer'
                                     }
                                 </Text>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                     }
-                    <TouchableHighlight
-                        style={{ padding: 30, borderWidth: 2 }}
-                        onPress={() => this.nextQuestion('correct')}
-                    >
-                        <Text>
-                            {
-                                !this.state.showReplay ? 'Correct' : 'Replay'
-                            }
-                        </Text>
-                    </TouchableHighlight>
 
+                    <QuizButton
+                        onPress={() => this.nextQuestion('correct')}
+                        type={!showReplay ? 'correct' : 'replay'}
+                    />
                 </View>
             </View>
         );

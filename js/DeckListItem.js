@@ -1,31 +1,21 @@
 import React from 'react';
 import { TouchableHighlight, View, Text } from 'react-native';
+import styles from './styles/deckListItemStyles';
 
 const DeckListItem = ({ item, navigation, updateDecks }) => {
     return (
     <TouchableHighlight
-        style={{
-            minHeight: 100,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'white',
-        }}
+        style={styles.container}
         onPress={() => navigation.push('Deck', {
             deck: item,
             updateDecks, 
         })}
     >
-        <View
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-        >
-            <Text>
+        <View style={styles.textContainer}>
+            <Text style={styles.text}>
                 { item.title }
             </Text>
-            <Text>
+            <Text style={styles.text}>
                 Cards: { item.cards.length }
             </Text>
         </View>

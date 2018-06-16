@@ -91,6 +91,7 @@ export const addDeck = ({ title }) => {
                 .then(() => result);
         });
 }
+
 const createNotification = () => ({
     title: 'Forgotten anything?',
     body: `Dont't forget to quiz today!`,
@@ -109,32 +110,28 @@ export const setLocalNotification = () => {
     AsyncStorage.getItem(NOTIFICATION_KEY)
         .then(JSON.parse)
         .then((data) => {
-            clearLocalNotification().then(() => {
-                if (data === null) {
-                    Permissions.askAsync(Permissions.NOTIFICATIONS)
-                        .then(({ status }) => {
-                            console.log('status');
-                            if (status === 'granted') {
-                                Notifications.cancelAllScheduledNotificationsAsync();
+            if (data === null) {
+                Permissions.askAsync(Permissions.NOTIFICATIONS)
+                    .then(({ status }) => {
+                        if (status === 'granted') {
+                            Notifications.cancelAllScheduledNotificationsAsync();
 
-                                let tomorrow = new Date();
-                                tomorrow.setDate(tomorrow.getDate());
-                                tomorrow.setHours(4);
-                                tomorrow.setMinutes(tomorrow.getMinutes() + 1);
-                                console.log({ tomorrow: tomorrow });
-                                Notifications.scheduleLocalNotificationAsync(
-                                    createNotification(),
-                                    {
-                                        time: tomorrow,
-                                        repeat: 'day',
-                                    }
-                                );
+                            let tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate());
+                            tomorrow.setHours(15);
+                            tomorrow.setMinutes(0);
+                            Notifications.scheduleLocalNotificationAsync(
+                                createNotification(),
+                                {
+                                    time: tomorrow,
+                                    repeat: 'day',
+                                }
+                            );
 
-                                AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
-                            }
-                        });
-                }
-            });
+                            AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
+                        }
+                    });
+            }
         });
 }
 
